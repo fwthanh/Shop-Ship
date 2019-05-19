@@ -50,9 +50,9 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>FacebookAppID</key>
-	<string>656498654821548</string>
+	<string>416551079137290</string>
 	<key>AccountKitClientToken</key>
-	<string>ab76081d52958dbadd20ea23c40f790d</string>
+	<string>a47529495a06760d5e44eced55e1149a</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -62,5 +62,10 @@
 			</array>
 		</dict>
 	</array>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
 </dict>
 </plist>

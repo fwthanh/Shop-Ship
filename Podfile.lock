@@ -6,6 +6,7 @@ PODS:
   - ObjectMapper (3.4.2)
   - PKHUD (5.2.1)
   - ReachabilitySwift (4.3.1)
+  - SwiftyUserDefaults (3.0.1)
 
 DEPENDENCIES:
   - AccountKit
@@ -15,6 +16,7 @@ DEPENDENCIES:
   - ObjectMapper (~> 3.4)
   - PKHUD
   - ReachabilitySwift
+  - SwiftyUserDefaults
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -25,6 +27,7 @@ SPEC REPOS:
     - ObjectMapper
     - PKHUD
     - ReachabilitySwift
+    - SwiftyUserDefaults
 
 SPEC CHECKSUMS:
   AccountKit: 870ccaf5d33facda9408783e28fbe68c5211e069
@@ -34,7 +37,8 @@ SPEC CHECKSUMS:
   ObjectMapper: 0d4402610f4e468903ae64629eec4784531e5c51
   PKHUD: 4e6162c4c39ac367c6934e9855c6b4762ee16256
   ReachabilitySwift: 4032e2f59586e11e3b0ebe15b167abdd587a388b
+  SwiftyUserDefaults: 3d273b1739b68ada3145dc754a70ec775bc5c8be
 
-PODFILE CHECKSUM: baa651ee4c524ad80b871ab625d6474dd2f2936c
+PODFILE CHECKSUM: a862895d90ecc7c79714c3cddfb364432c2f52d1
 
 COCOAPODS: 1.6.1

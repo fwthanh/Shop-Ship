@@ -13,4 +13,5 @@ target 'App' do
   pod 'ReachabilitySwift' #4.3.0
   pod 'PKHUD' #5.2.0
   pod 'LSDialogViewController'
+  pod 'SwiftyUserDefaults'
 end

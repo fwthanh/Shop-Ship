@@ -16,6 +16,7 @@ class LoginViewController: UIViewController, AKFViewControllerDelegate {
     @IBOutlet weak var vRoleShop: UIView!
     
     var _accountKit: AKFAccountKit!
+    var selectRole: String = "user"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +26,7 @@ class LoginViewController: UIViewController, AKFViewControllerDelegate {
         vRoleShop.applyCornerRadiusDefault()
         
         if _accountKit == nil {
-            _accountKit = AKFAccountKit(responseType: .accessToken)
+            _accountKit = AKFAccountKit(responseType: .authorizationCode)
         }
     }
     
@@ -44,21 +45,32 @@ class LoginViewController: UIViewController, AKFViewControllerDelegate {
         loginViewController.whitelistedCountryCodes = ["VN"]
         loginViewController.uiManager = AKFSkinManager(skinType: .classic, primaryColor: .lightGray)
     }
-    
-    func viewController(_ viewController: (UIViewController & AKFViewController)!, didCompleteLoginWith accessToken: AKFAccessToken!, state: String!) {
-        print("did complete login with access token \(accessToken.tokenString) state \(state ?? "abc")")
-        // switch root view controllers in AppDelegate
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.switchMainViewControllers()
-    }
 
+    func viewController(_ viewController: (UIViewController & AKFViewController)!, didCompleteLoginWithAuthorizationCode code: String!, state: String!) {
+        FService.sharedInstance.login(code: code, role: selectRole) { (token, errMsg) in
+            if token != nil {
+                Common.token = token
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.switchMainViewControllers()
+            }
+            else {
+                let alert = UIAlertController(title: errMsg, message: "", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in }))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+    
     @IBAction func userLogin(_ sender: Any) {
+        selectRole = "user"
         self.loginWithPhone()
     }
     @IBAction func shipperLogin(_ sender: Any) {
+        selectRole = "shipper"
         self.loginWithPhone()
     }
     @IBAction func shopLogin(_ sender: Any) {
+        selectRole = "shop"
         self.loginWithPhone()
     }
 }
