@@ -1,0 +1,40 @@
+PODS:
+  - AccountKit (4.35.0)
+  - Alamofire (4.8.2)
+  - Kingfisher (4.9.0)
+  - LSDialogViewController (3.2)
+  - ObjectMapper (3.4.2)
+  - PKHUD (5.2.1)
+  - ReachabilitySwift (4.3.1)
+
+DEPENDENCIES:
+  - AccountKit
+  - Alamofire (~> 4.8)
+  - Kingfisher (= 4.9.0)
+  - LSDialogViewController
+  - ObjectMapper (~> 3.4)
+  - PKHUD
+  - ReachabilitySwift
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AccountKit
+    - Alamofire
+    - Kingfisher
+    - LSDialogViewController
+    - ObjectMapper
+    - PKHUD
+    - ReachabilitySwift
+
+SPEC CHECKSUMS:
+  AccountKit: 870ccaf5d33facda9408783e28fbe68c5211e069
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  Kingfisher: 64539b51826b778206daa6ed815d12653caa69dd
+  LSDialogViewController: 921fd68b78b595152e5493a927368046993e56da
+  ObjectMapper: 0d4402610f4e468903ae64629eec4784531e5c51
+  PKHUD: 4e6162c4c39ac367c6934e9855c6b4762ee16256
+  ReachabilitySwift: 4032e2f59586e11e3b0ebe15b167abdd587a388b
+
+PODFILE CHECKSUM: baa651ee4c524ad80b871ab625d6474dd2f2936c
+
+COCOAPODS: 1.6.1
