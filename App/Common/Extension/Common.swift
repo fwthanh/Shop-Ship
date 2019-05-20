@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 import SwiftyUserDefaults
 
 struct Common {
@@ -24,10 +25,68 @@ struct Common {
         }
     }
     
+    static var role : String? {
+        get {
+            if ACUserDefault?[.role] == nil {
+                ACUserDefault?[.role] = ""
+            }
+            return ACUserDefault?[.role]
+        }
+        set {
+            ACUserDefault?[.role] = newValue
+            ACUserDefault?.synchronize()
+        }
+    }
+    
+    static var userInfo : User? {
+        get {
+            return ACUserDefault?[.curentUserInfo]
+        }
+        set {
+            ACUserDefault?[.curentUserInfo] = newValue
+        }
+    }
+    
+    static var shopInfo : Shop? {
+        get {
+            return ACUserDefault?[.curentShopInfo]
+        }
+        set {
+            ACUserDefault?[.curentShopInfo] = newValue
+        }
+    }
 }
 
 extension DefaultsKeys {
     static let token            = DefaultsKey<String?>("token")
+    static let role             = DefaultsKey<String?>("role")
+    static let curentUserInfo   = DefaultsKey<User?>("curentUserInfo")
+    static let curentShopInfo   = DefaultsKey<Shop?>("curentShopInfo")
+}
+
+extension UserDefaults {
+    
+    subscript(key: DefaultsKey<User?>) -> User? {
+        get {
+            NSKeyedArchiver.setClassName("User", for: User.self)
+            return unarchive(key)
+        }
+        set {
+            NSKeyedUnarchiver.setClass(User.self, forClassName: "User")
+            archive(key, newValue)
+        }
+    }
+    
+    subscript(key: DefaultsKey<Shop?>) -> Shop? {
+        get {
+            NSKeyedArchiver.setClassName("Shop", for: Shop.self)
+            return unarchive(key)
+        }
+        set {
+            NSKeyedUnarchiver.setClass(Shop.self, forClassName: "Shop")
+            archive(key, newValue)
+        }
+    }
 }
 
 public let ACUserDefault = UserDefaults(suiteName: "App")

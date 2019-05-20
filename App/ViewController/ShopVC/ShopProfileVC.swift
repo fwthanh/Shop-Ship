@@ -1,15 +1,15 @@
 //
-//  ProfileViewController.swift
+//  ShopProfileVC.swift
 //  App
 //
-//  Created by Pqt Dark on 5/4/19.
+//  Created by Pqt Dark on 5/20/19.
 //  Copyright © 2019 Pqt. All rights reserved.
 //
 
 import UIKit
 
-class ProfileViewController: UIViewController {
-
+class ShopProfileVC: UIViewController {
+    
     @IBOutlet weak var btnLogout: UIButton!
     @IBOutlet weak var imgAvata: UIImageView!
     @IBOutlet weak var tfName: UITextField!
@@ -28,8 +28,8 @@ class ProfileViewController: UIViewController {
         imgAvata.layer.cornerRadius = 40.0
         imgAvata.layer.masksToBounds = true
         
-        if let userInfo: User = Common.userInfo {
-            tfPhone.text = userInfo.phone_contact?.replacingOccurrences(of: "84", with: "0")
+        if let shopInfo: Shop = Common.shopInfo {
+            tfPhone.text = shopInfo.phone_contact?.replacingOccurrences(of: "84", with: "0")
         }
         
     }

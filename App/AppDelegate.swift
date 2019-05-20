@@ -17,13 +17,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         ///*
-        self.window = UIWindow(frame: UIScreen.main.bounds)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let initialViewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
-        self.window?.rootViewController = initialViewController
-        self.window?.makeKeyAndVisible()
-         //*/
-        //self.switchMainViewControllers()
+        let token = Common.token
+        if token != "" {
+            if Common.role == "user" {
+                self.switchMainViewControllers()
+            }
+            else if Common.role == "shop" {
+                self.switchShopViewControllers()
+            }
+        }
+        else {
+            self.switchLoginViewController()
+        }
         return true
     }
 
@@ -57,5 +62,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
     }
 
+    func switchLoginViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let initialViewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
+        self.window?.rootViewController = initialViewController
+        self.window?.makeKeyAndVisible()
+    }
+    
+    func switchShopViewControllers() {
+        // switch root view controllers
+        let storyboard = UIStoryboard(name: "Shop", bundle: nil)
+        let initialViewController = storyboard.instantiateViewController(withIdentifier: "MainViewController")
+        self.window?.rootViewController = initialViewController
+        self.window?.makeKeyAndVisible()
+    }
 }
 

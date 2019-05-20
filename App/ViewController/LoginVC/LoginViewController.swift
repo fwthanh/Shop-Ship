@@ -50,8 +50,35 @@ class LoginViewController: UIViewController, AKFViewControllerDelegate {
         FService.sharedInstance.login(code: code, role: selectRole) { (token, errMsg) in
             if token != nil {
                 Common.token = token
-                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                appDelegate.switchMainViewControllers()
+                
+                if Common.role == "user" {
+                    FService.sharedInstance.getUserProfile(completion: { (user, errMsg) in
+                        if user != nil {
+                            Common.userInfo = user
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            appDelegate.switchMainViewControllers()
+                        }
+                        else {
+                            let alert = UIAlertController(title: errMsg, message: "", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in }))
+                            self.present(alert, animated: true, completion: nil)
+                        }
+                    })
+                }
+                else if Common.role == "shop" {
+                    FService.sharedInstance.getShopProfile(completion: { (shop, errMsg) in
+                        if shop != nil {
+                            Common.shopInfo = shop
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            appDelegate.switchMainViewControllers()
+                        }
+                        else {
+                            let alert = UIAlertController(title: errMsg, message: "", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in }))
+                            self.present(alert, animated: true, completion: nil)
+                        }
+                    })
+                }
             }
             else {
                 let alert = UIAlertController(title: errMsg, message: "", preferredStyle: .alert)
