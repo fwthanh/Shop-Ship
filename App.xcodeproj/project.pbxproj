@@ -35,6 +35,10 @@
 		429364E3226C5D2000E74FA0 /* CategoriesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429364E2226C5D2000E74FA0 /* CategoriesViewCell.swift */; };
 		429364E5226C67D300E74FA0 /* DeliveringViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429364E4226C67D300E74FA0 /* DeliveringViewCell.swift */; };
 		429364E7226C680C00E74FA0 /* DeliveringCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429364E6226C680C00E74FA0 /* DeliveringCollectionCell.swift */; };
+		42943A54229449F900464058 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42943A53229449F900464058 /* Category.swift */; };
+		42943A5822944EB500464058 /* ShopMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42943A5722944EB500464058 /* ShopMenuVC.swift */; };
+		42943A5A229461B500464058 /* UIControl+Closures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42943A59229461B500464058 /* UIControl+Closures.swift */; };
+		42943A5C2294641600464058 /* SelectCategoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42943A5B2294641600464058 /* SelectCategoryVC.swift */; };
 		4297602A226B599000D5E196 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42976029226B599000D5E196 /* LoginViewController.swift */; };
 		42976033226B5BBB00D5E196 /* ViewExtentsion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42976032226B5BBB00D5E196 /* ViewExtentsion.swift */; };
 		42976035226B61C500D5E196 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42976034226B61C500D5E196 /* ColorExtension.swift */; };
@@ -72,6 +76,10 @@
 		429364E2226C5D2000E74FA0 /* CategoriesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewCell.swift; sourceTree = "<group>"; };
 		429364E4226C67D300E74FA0 /* DeliveringViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveringViewCell.swift; sourceTree = "<group>"; };
 		429364E6226C680C00E74FA0 /* DeliveringCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveringCollectionCell.swift; sourceTree = "<group>"; };
+		42943A53229449F900464058 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		42943A5722944EB500464058 /* ShopMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopMenuVC.swift; sourceTree = "<group>"; };
+		42943A59229461B500464058 /* UIControl+Closures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIControl+Closures.swift"; sourceTree = "<group>"; };
+		42943A5B2294641600464058 /* SelectCategoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCategoryVC.swift; sourceTree = "<group>"; };
 		42976029226B599000D5E196 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		42976032226B5BBB00D5E196 /* ViewExtentsion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtentsion.swift; sourceTree = "<group>"; };
 		42976034226B61C500D5E196 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
@@ -111,10 +119,10 @@
 		425968A32263ECA400B6256A /* App */ = {
 			isa = PBXGroup;
 			children = (
+				4297602D226B5A6E00D5E196 /* Common */,
 				42976030226B5AC500D5E196 /* Model */,
 				42976031226B5AD200D5E196 /* View */,
 				42976027226B595A00D5E196 /* ViewController */,
-				4297602D226B5A6E00D5E196 /* Common */,
 				4297602B226B5A2E00D5E196 /* Storyboard */,
 				425968A42263ECA500B6256A /* AppDelegate.swift */,
 				425968AD2263ECA600B6256A /* Assets.xcassets */,
@@ -129,6 +137,7 @@
 			children = (
 				4287B4D22283191500F41E24 /* SelectMenuVC.swift */,
 				428546A722846D3D00C14A8B /* OrderInfoViewController.swift */,
+				42943A5B2294641600464058 /* SelectCategoryVC.swift */,
 			);
 			path = SubViewController;
 			sourceTree = "<group>";
@@ -137,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				42899ADD2292EDE70021BF59 /* ShopProfileVC.swift */,
+				42943A5722944EB500464058 /* ShopMenuVC.swift */,
 			);
 			path = ShopVC;
 			sourceTree = "<group>";
@@ -218,6 +228,7 @@
 				42976032226B5BBB00D5E196 /* ViewExtentsion.swift */,
 				42976034226B61C500D5E196 /* ColorExtension.swift */,
 				428546A522845D4300C14A8B /* DoubleExtensions.swift */,
+				42943A59229461B500464058 /* UIControl+Closures.swift */,
 				428C01AC2291B220005284AD /* Common.swift */,
 			);
 			path = Extension;
@@ -237,6 +248,7 @@
 				42899AD62292D7810021BF59 /* User.swift */,
 				42899AD82292D7900021BF59 /* Shop.swift */,
 				42899ADA2292D79E0021BF59 /* Shipper.swift */,
+				42943A53229449F900464058 /* Category.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -426,10 +438,13 @@
 				42899ADB2292D79E0021BF59 /* Shipper.swift in Sources */,
 				427A6045227D777600A8FF6D /* TblHistoryCell.swift in Sources */,
 				429364E3226C5D2000E74FA0 /* CategoriesViewCell.swift in Sources */,
+				42943A5A229461B500464058 /* UIControl+Closures.swift in Sources */,
 				4287B4D32283191500F41E24 /* SelectMenuVC.swift in Sources */,
 				4297602A226B599000D5E196 /* LoginViewController.swift in Sources */,
 				428C01AD2291B220005284AD /* Common.swift in Sources */,
 				428546A622845D4300C14A8B /* DoubleExtensions.swift in Sources */,
+				42943A5C2294641600464058 /* SelectCategoryVC.swift in Sources */,
+				42943A5822944EB500464058 /* ShopMenuVC.swift in Sources */,
 				429364E1226C5CE800E74FA0 /* CategoriesCollectionCell.swift in Sources */,
 				42899ADE2292EDE70021BF59 /* ShopProfileVC.swift in Sources */,
 				427A6047227D935F00A8FF6D /* ProfileViewController.swift in Sources */,
@@ -446,6 +461,7 @@
 				42976035226B61C500D5E196 /* ColorExtension.swift in Sources */,
 				42976033226B5BBB00D5E196 /* ViewExtentsion.swift in Sources */,
 				428C01AB2291A65B005284AD /* FService.swift in Sources */,
+				42943A54229449F900464058 /* Category.swift in Sources */,
 				428546A822846D3D00C14A8B /* OrderInfoViewController.swift in Sources */,
 				425968A72263ECA500B6256A /* UserViewController.swift in Sources */,
 				42899AD72292D7810021BF59 /* User.swift in Sources */,

@@ -15,9 +15,15 @@ class ShopProfileVC: UIViewController {
     @IBOutlet weak var tfName: UITextField!
     @IBOutlet weak var btnEditName: UIButton!
     @IBOutlet weak var tfPhone: UITextField!
+    @IBOutlet weak var tfAddress: UITextField!
+    @IBOutlet weak var btnEditAddress: UIButton!
+    @IBOutlet weak var tfCategory: UITextField!
+    @IBOutlet weak var btnChooseCategory: UIButton!
     @IBOutlet weak var btnEditAvata: UIButton!
     
     var isEditingName: Bool = false
+    var idImgUpload: String = ""
+    var listCategory: [Category]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +34,16 @@ class ShopProfileVC: UIViewController {
         imgAvata.layer.cornerRadius = 40.0
         imgAvata.layer.masksToBounds = true
         
-        if let shopInfo: Shop = Common.shopInfo {
+        if let shopInfo: Shop = Common.shopInfo, shopInfo.address != "" {
             tfPhone.text = shopInfo.phone_contact?.replacingOccurrences(of: "84", with: "0")
+        }
+        else {
+            FService.sharedInstance.getCategories { (categories, errMsg) in
+                self.listCategory = categories
+            }
+            self.btnChooseCategory.add(UIControl.Event.touchUpInside) { (act) in
+                self.performSegue(withIdentifier: "Category", sender: self)
+            }
         }
         
     }
@@ -43,6 +57,18 @@ class ShopProfileVC: UIViewController {
         else {
             tfName.isEnabled = false
             tfName.resignFirstResponder()
+        }
+    }
+    
+    @IBAction func editAddress(_ sender: UIButton) {
+        btnEditAddress.isSelected = !btnEditAddress.isSelected
+        if btnEditAddress.isSelected == true {
+            tfAddress.isEnabled = true
+            tfAddress.becomeFirstResponder()
+        }
+        else {
+            tfAddress.isEnabled = false
+            tfAddress.resignFirstResponder()
         }
     }
     
@@ -71,10 +97,23 @@ class ShopProfileVC: UIViewController {
     }
     
     @IBAction func Logout(_ sender: Any) {
-        Common.role = nil
-        Common.token = nil
-        Common.userInfo = nil
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.switchLoginViewController()
+        FService.sharedInstance.uploadImage(url: FService.uploadImageUrl, image: UIImage(named: "ic_delivery")!) { (ids, errMsg) in
+            self.idImgUpload = ids?.first ?? ""
+            if self.idImgUpload != "" {
+                
+            }
+        }
+//        Common.role = nil
+//        Common.token = nil
+//        Common.userInfo = nil
+//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        appDelegate.switchLoginViewController()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Category" {
+            let viewController: SelectCategoryVC = segue.destination as! SelectCategoryVC
+            //viewController.idShop = 1
+        }
     }
 }
