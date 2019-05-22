@@ -25,6 +25,7 @@
 		42899ADB2292D79E0021BF59 /* Shipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42899ADA2292D79E0021BF59 /* Shipper.swift */; };
 		42899ADE2292EDE70021BF59 /* ShopProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42899ADD2292EDE70021BF59 /* ShopProfileVC.swift */; };
 		42899AE02292EE300021BF59 /* Shop.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42899ADF2292EE300021BF59 /* Shop.storyboard */; };
+		428A994022958C1B0058F9E0 /* CommonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428A993F22958C1B0058F9E0 /* CommonManager.swift */; };
 		428C01AB2291A65B005284AD /* FService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428C01AA2291A65B005284AD /* FService.swift */; };
 		428C01AD2291B220005284AD /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428C01AC2291B220005284AD /* Common.swift */; };
 		428E969C227F127000CA8F00 /* MenuShopVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428E969B227F127000CA8F00 /* MenuShopVC.swift */; };
@@ -66,6 +67,7 @@
 		42899ADA2292D79E0021BF59 /* Shipper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shipper.swift; sourceTree = "<group>"; };
 		42899ADD2292EDE70021BF59 /* ShopProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopProfileVC.swift; sourceTree = "<group>"; };
 		42899ADF2292EE300021BF59 /* Shop.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Shop.storyboard; sourceTree = "<group>"; };
+		428A993F22958C1B0058F9E0 /* CommonManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonManager.swift; sourceTree = "<group>"; };
 		428C01AA2291A65B005284AD /* FService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FService.swift; sourceTree = "<group>"; };
 		428C01AC2291B220005284AD /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		428E969B227F127000CA8F00 /* MenuShopVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuShopVC.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				428546A522845D4300C14A8B /* DoubleExtensions.swift */,
 				42943A59229461B500464058 /* UIControl+Closures.swift */,
 				428C01AC2291B220005284AD /* Common.swift */,
+				428A993F22958C1B0058F9E0 /* CommonManager.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -449,6 +452,7 @@
 				42899ADE2292EDE70021BF59 /* ShopProfileVC.swift in Sources */,
 				427A6047227D935F00A8FF6D /* ProfileViewController.swift in Sources */,
 				425968A92263ECA500B6256A /* SecondViewController.swift in Sources */,
+				428A994022958C1B0058F9E0 /* CommonManager.swift in Sources */,
 				429364DF226C3ED600E74FA0 /* HeaderCollectionCell.swift in Sources */,
 				429364E5226C67D300E74FA0 /* DeliveringViewCell.swift in Sources */,
 				429364E7226C680C00E74FA0 /* DeliveringCollectionCell.swift in Sources */,

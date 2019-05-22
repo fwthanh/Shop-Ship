@@ -20,6 +20,7 @@ class FService: NSObject {
     static let loginUrl             = "api/v1/auth/token"
     static let getProfileUrl        = "api/v1/users/me"
     ////SHOP////
+    static let createProfileShop    = "api/v1/shops"
     static let getProfileShop       = "api/v1/shops/current"
     static let saveProfileShop      = "api/v1/shops/current"
     static let getCategories        = "api/v1/categories"
@@ -32,6 +33,35 @@ class FService: NSObject {
         let endpoint: String = FService.baseURLString + url
         Alamofire.request(endpoint, method: method, parameters: params, encoding: JSONEncoding.default, headers: nil).responseJSON {
             response in
+            guard response.result.isSuccess else {
+                completion(nil, response.result.error)
+                return
+            }
+            
+            guard let value = response.result.value as? [String: Any] else {
+                completion(nil, nil)
+                return
+            }
+            completion(value, nil)
+        }
+    }
+    
+    func requestBody(url: String, method: HTTPMethod, params: [String: Any]?, completion: @escaping (_ result: [String: Any]?, _ error: Error?) -> Void) {
+        let urlString: String = FService.baseURLString + url
+        
+        let json = params?.jsonStringRepresentation ?? ""
+        
+        let url = URL(string: urlString)!
+        let jsonData = json.data(using: .utf8, allowLossyConversion: false)!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(Common.token ?? "")", forHTTPHeaderField: "Authorization")
+        request.httpBody = jsonData
+        
+        Alamofire.request(request).responseJSON {
+            (response) in
             guard response.result.isSuccess else {
                 completion(nil, response.result.error)
                 return
@@ -183,6 +213,38 @@ class FService: NSObject {
         }
     }
     
+    func createShopProfile(category_id: String,
+                           avatar_id: String,
+                           cover_id: String,
+                           name: String,
+                           address: String,
+                           location: [String: Any],
+                           completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
+        
+        let params = ["category_id" : category_id,
+                      "avatar_id": avatar_id,
+                      "cover_id": cover_id,
+                      "name": name,
+                      "address": address,
+                      "location": location ] as [String : Any]
+        
+        requestBody(url: FService.createProfileShop, method: .post, params: params) { (result, error) in
+            let status: String = result?["status"] as! String
+            if status == "success" {
+                if let data = result?["data"] as? [String: Any] {
+                    let idShop = data["id"] as? String ?? ""
+                    completion(idShop, nil)
+                }
+                else {
+                    completion(nil, nil)
+                }
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
     func getShopProfile( completion: @escaping (_ shop: Shop?,_ errMsg: String?) -> ()) -> () {
 
         requestAuthorization(url: FService.getProfileShop, method: .get, params: nil) { (result, error) in
@@ -231,6 +293,21 @@ class FService: NSObject {
                 else {
                     completion(nil, nil)
                 }
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
+    func saveNameShopProfile(name: String, address: String, completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
+        
+        let params = ["name": name, "address": address] as [String : Any]
+        requestBody(url: FService.saveProfileShop, method: .put, params: params) { (result, error) in
+            
+            let status: String = result?["status"] as! String
+            if status == "success" {
+                completion("success", nil)
             }
             else {
                 completion(nil, result?["message"] as? String)

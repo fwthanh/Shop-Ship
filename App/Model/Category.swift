@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import ObjectMapper
 
-class Category: NSObject, Mappable {
+class Category: NSObject, NSCoding, Mappable {
     
     var id              : String?
     var avatar_url      : String?
@@ -36,5 +36,17 @@ class Category: NSObject, Mappable {
         id                  <- map["id"]
         name                <- map["name"]
         avatar_url          <- map["avatar_url"]
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        self.id = aDecoder.decodeObject(forKey: "id") as? String
+        self.name = aDecoder.decodeObject(forKey: "name") as? String
+        self.avatar_url = aDecoder.decodeObject(forKey: "avatar_url") as? String
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(id, forKey: "id")
+        aCoder.encode(name, forKey: "name")
+        aCoder.encode(avatar_url, forKey: "avatar_url")
     }
 }
