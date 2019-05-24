@@ -178,7 +178,6 @@ class ShopProfileVC: UIViewController {
                     //print("Lat: \(lat), Lon: \(lon)")
                     let pLocation = ["lat": lat, "lng": long]
                     FService.sharedInstance.createShopProfile(category_id: self.category?.id ?? "", avatar_id: self.idImgUpload, cover_id: self.idImgCoverUpload, name: self.tfName.text ?? "", address: self.tfAddress.text ?? "", location: pLocation as [String : Any]) { (success, errMsg) in
-                        print("----")
                         PKHUD.sharedHUD.hide()
                     }
                 }
@@ -247,9 +246,18 @@ extension ShopProfileVC: UITextFieldDelegate {
         let alert = UIAlertController(title: "Cập nhật thông tin", message: "Bạn muốn cập nhật lại thông tin?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { action in
             PKHUD.sharedHUD.show()
-            FService.sharedInstance.saveNameShopProfile(name: self.tfName.text ?? "", address: self.tfAddress.text ?? "") { (success, errMsg) in
-                PKHUD.sharedHUD.hide()
+            let geocoder = CLGeocoder()
+            geocoder.geocodeAddressString(self.tfAddress.text ?? "") { (placemarks, error) in
+                let placemark = placemarks?.first
+                let lat = placemark?.location?.coordinate.latitude ?? 0.0
+                let long = placemark?.location?.coordinate.longitude ?? 0.0
+                //print("Lat: \(lat), Lon: \(lon)")
+                let pLocation = ["lat": lat, "lng": long]
+                FService.sharedInstance.saveNameShopProfile(name: self.tfName.text ?? "", address: self.tfAddress.text ?? "",location: pLocation) { (success, errMsg) in
+                    PKHUD.sharedHUD.hide()
+                }
             }
+            
         }))
         alert.addAction(UIAlertAction(title: "NO", style: .cancel, handler: { action in
             self.tfName.text = Common.shopInfo?.name

@@ -24,6 +24,9 @@ class FService: NSObject {
     static let getProfileShop       = "api/v1/shops/current"
     static let saveProfileShop      = "api/v1/shops/current"
     static let getCategories        = "api/v1/categories"
+    static let getMenuShop          = "api/v1/shops/current/categories"
+    static let createMenuShop       = "api/v1/shops/current/posts"
+    static let getPostShop          = "api/v1/shops/current/posts"
     
     ////MEDIA////
     static let uploadImageUrl       = "api/v1/medias"
@@ -300,14 +303,86 @@ class FService: NSObject {
         }
     }
     
-    func saveNameShopProfile(name: String, address: String, completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
+    func saveNameShopProfile(name: String, address: String, location: [String: Any], completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
         
-        let params = ["name": name, "address": address] as [String : Any]
+        let params = ["name": name, "address": address, "location": location] as [String : Any]
         requestBody(url: FService.saveProfileShop, method: .put, params: params) { (result, error) in
             
             let status: String = result?["status"] as! String
             if status == "success" {
                 completion("success", nil)
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
+    func saveAvataShopProfile(avatar_id: String, completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
+        
+        let params = ["avatar_id": avatar_id] as [String : Any]
+        requestBody(url: FService.saveProfileShop, method: .put, params: params) { (result, error) in
+            
+            let status: String = result?["status"] as! String
+            if status == "success" {
+                completion("success", nil)
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
+    func saveCoverShopProfile(cover_id: String, completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
+        
+        let params = ["cover_id": cover_id] as [String : Any]
+        requestBody(url: FService.saveProfileShop, method: .put, params: params) { (result, error) in
+            
+            let status: String = result?["status"] as! String
+            if status == "success" {
+                completion("success", nil)
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
+    func createPost(name: String, description: String, quantity: Int, price: CGFloat, discount: [String: Any], avatar_id: String, completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
+        
+        let params = ["name": name,
+                      "description": description,
+                      "quantity": quantity,
+                      "price": price,
+                      "discount": discount,
+                      "avatar_id": avatar_id] as [String : Any]
+        requestBody(url: FService.createMenuShop, method: .post, params: params) { (result, error) in
+            let status: String = result?["status"] as! String
+            if status == "success" {
+                completion("success", nil)
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
+    func getPostShop( completion: @escaping (_ shop: DataPost?,_ errMsg: String?) -> ()) -> () {
+        
+        requestAuthorization(url: FService.getPostShop, method: .get, params: nil) { (result, error) in
+            
+            let status: String = result?["status"] as! String
+            if status == "success" {
+                if let data = result?["data"] as? [String: Any] {
+                    let postInfo = Mapper<DataPost>().map(JSON: data)
+                    completion(postInfo, nil)
+                }
+                else {
+                    completion(nil, nil)
+                }
+            }
+            else if let code = result?["http_status"] as? Int, code == 404 {
+                completion(nil, nil)
             }
             else {
                 completion(nil, result?["message"] as? String)

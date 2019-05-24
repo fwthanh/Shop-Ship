@@ -26,6 +26,7 @@
 		42899ADE2292EDE70021BF59 /* ShopProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42899ADD2292EDE70021BF59 /* ShopProfileVC.swift */; };
 		42899AE02292EE300021BF59 /* Shop.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42899ADF2292EE300021BF59 /* Shop.storyboard */; };
 		428A994022958C1B0058F9E0 /* CommonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428A993F22958C1B0058F9E0 /* CommonManager.swift */; };
+		428BA48922982A18006C4CB1 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428BA48822982A18006C4CB1 /* Post.swift */; };
 		428C01AB2291A65B005284AD /* FService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428C01AA2291A65B005284AD /* FService.swift */; };
 		428C01AD2291B220005284AD /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428C01AC2291B220005284AD /* Common.swift */; };
 		428E969C227F127000CA8F00 /* MenuShopVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428E969B227F127000CA8F00 /* MenuShopVC.swift */; };
@@ -43,6 +44,7 @@
 		4297602A226B599000D5E196 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42976029226B599000D5E196 /* LoginViewController.swift */; };
 		42976033226B5BBB00D5E196 /* ViewExtentsion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42976032226B5BBB00D5E196 /* ViewExtentsion.swift */; };
 		42976035226B61C500D5E196 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42976034226B61C500D5E196 /* ColorExtension.swift */; };
+		429E7F3A22975F2500F0275D /* CreateMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429E7F3922975F2500F0275D /* CreateMenuVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +70,7 @@
 		42899ADD2292EDE70021BF59 /* ShopProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopProfileVC.swift; sourceTree = "<group>"; };
 		42899ADF2292EE300021BF59 /* Shop.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Shop.storyboard; sourceTree = "<group>"; };
 		428A993F22958C1B0058F9E0 /* CommonManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonManager.swift; sourceTree = "<group>"; };
+		428BA48822982A18006C4CB1 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		428C01AA2291A65B005284AD /* FService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FService.swift; sourceTree = "<group>"; };
 		428C01AC2291B220005284AD /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		428E969B227F127000CA8F00 /* MenuShopVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuShopVC.swift; sourceTree = "<group>"; };
@@ -85,6 +88,7 @@
 		42976029226B599000D5E196 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		42976032226B5BBB00D5E196 /* ViewExtentsion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtentsion.swift; sourceTree = "<group>"; };
 		42976034226B61C500D5E196 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		429E7F3922975F2500F0275D /* CreateMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMenuVC.swift; sourceTree = "<group>"; };
 		7C5FE8429FED400F9D84E72F /* Pods-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.debug.xcconfig"; path = "Target Support Files/Pods-App/Pods-App.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -149,6 +153,7 @@
 			children = (
 				42899ADD2292EDE70021BF59 /* ShopProfileVC.swift */,
 				42943A5722944EB500464058 /* ShopMenuVC.swift */,
+				429E7F3922975F2500F0275D /* CreateMenuVC.swift */,
 			);
 			path = ShopVC;
 			sourceTree = "<group>";
@@ -252,6 +257,7 @@
 				42899AD82292D7900021BF59 /* Shop.swift */,
 				42899ADA2292D79E0021BF59 /* Shipper.swift */,
 				42943A53229449F900464058 /* Category.swift */,
+				428BA48822982A18006C4CB1 /* Post.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -450,9 +456,11 @@
 				42943A5822944EB500464058 /* ShopMenuVC.swift in Sources */,
 				429364E1226C5CE800E74FA0 /* CategoriesCollectionCell.swift in Sources */,
 				42899ADE2292EDE70021BF59 /* ShopProfileVC.swift in Sources */,
+				428BA48922982A18006C4CB1 /* Post.swift in Sources */,
 				427A6047227D935F00A8FF6D /* ProfileViewController.swift in Sources */,
 				425968A92263ECA500B6256A /* SecondViewController.swift in Sources */,
 				428A994022958C1B0058F9E0 /* CommonManager.swift in Sources */,
+				429E7F3A22975F2500F0275D /* CreateMenuVC.swift in Sources */,
 				429364DF226C3ED600E74FA0 /* HeaderCollectionCell.swift in Sources */,
 				429364E5226C67D300E74FA0 /* DeliveringViewCell.swift in Sources */,
 				429364E7226C680C00E74FA0 /* DeliveringCollectionCell.swift in Sources */,
