@@ -27,6 +27,7 @@ class FService: NSObject {
     static let getMenuShop          = "api/v1/shops/current/categories"
     static let createMenuShop       = "api/v1/shops/current/posts"
     static let getPostShop          = "api/v1/shops/current/posts"
+    static let editPostShop         = "api/v1/shops/current/posts/"
     
     ////MEDIA////
     static let uploadImageUrl       = "api/v1/medias"
@@ -348,7 +349,7 @@ class FService: NSObject {
         }
     }
     
-    func createPost(name: String, description: String, quantity: Int, price: CGFloat, discount: [String: Any], avatar_id: String, completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
+    func createPost(name: String, description: String, quantity: Int, price: Double, discount: [String: Any], avatar_id: String, completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
         
         let params = ["name": name,
                       "description": description,
@@ -383,6 +384,36 @@ class FService: NSObject {
             }
             else if let code = result?["http_status"] as? Int, code == 404 {
                 completion(nil, nil)
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
+    func editPost(idPost: String, name: String, description: String, quantity: Int, price: Double, discount: [String: Any], avatar_id: String, completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
+        
+        var params = [String:Any]()
+        if avatar_id == "" {
+            params = ["name": name,
+                      "description": description,
+                      "quantity": quantity,
+                      "price": price,
+                      "discount": discount] as [String : Any]
+        }
+        else {
+            params = ["name": name,
+                      "description": description,
+                      "quantity": quantity,
+                      "price": price,
+                      "discount": discount,
+                      "avatar_id": avatar_id] as [String : Any]
+        }
+
+        requestBody(url: FService.editPostShop + idPost, method: .put, params: params) { (result, error) in
+            let status: String = result?["status"] as! String
+            if status == "success" {
+                completion("success", nil)
             }
             else {
                 completion(nil, result?["message"] as? String)

@@ -14,4 +14,6 @@ target 'App' do
   pod 'PKHUD' #5.2.0
   pod 'LSDialogViewController'
   pod 'SwiftyUserDefaults'
+  pod 'SwiftValidator', :git => 'https://github.com/jpotts18/SwiftValidator.git', :tag => '4.2.0'
+  
 end

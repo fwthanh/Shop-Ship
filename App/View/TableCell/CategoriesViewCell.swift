@@ -32,8 +32,8 @@ class CategoriesViewCell: UITableViewCell, UICollectionViewDelegate, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = self.bounds.width/4 - 16
-        return CGSize(width: width, height: width)
+        let width = self.bounds.width/4
+        return CGSize(width: width - 10, height: width - 10)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

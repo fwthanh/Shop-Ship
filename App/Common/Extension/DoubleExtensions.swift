@@ -58,3 +58,18 @@ extension Double {
         return !self.isLessThanOrEqualTo(other)
     }
 }
+
+extension String {
+    var _currencyDouble: Double {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currencyAccounting
+        formatter.locale = NSLocale(localeIdentifier: "vi_VN") as Locale
+        //let numberFromField = (NSString(string: self).doubleValue)
+        //return formatter.string(from: NSNumber(value: numberFromField)) ?? ""
+        if let number = formatter.number(from: self) {
+            let amount = number.doubleValue
+            return amount
+        }
+        return 0.0
+    }
+}

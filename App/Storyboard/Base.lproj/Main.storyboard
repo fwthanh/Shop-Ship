@@ -102,7 +102,7 @@
                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="CnJ-fy-1nb">
                                                     <rect key="frame" x="8" y="36" width="304" height="139"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="HWr-pf-vCc">
+                                                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="HWr-pf-vCc">
                                                         <size key="itemSize" width="60" height="60"/>
                                                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -117,26 +117,39 @@
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
                                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_food" translatesAutoresizingMaskIntoConstraints="NO" id="hcX-uH-yzQ">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="60" height="35"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
                                                                     </imageView>
+                                                                    <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jRy-nk-Uwl">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    </view>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thức ăn" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s5H-aI-mPI">
-                                                                        <rect key="frame" x="0.0" y="35" width="60" height="25"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                                        <color key="textColor" red="0.14901960780000001" green="0.18823529410000001" blue="0.32156862749999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                 </subviews>
                                                             </view>
                                                             <constraints>
-                                                                <constraint firstAttribute="bottom" secondItem="s5H-aI-mPI" secondAttribute="bottom" id="7fu-uC-77c"/>
-                                                                <constraint firstItem="hcX-uH-yzQ" firstAttribute="height" secondItem="boA-xn-yrz" secondAttribute="height" multiplier="2:3" constant="-5" id="89E-lh-YJT"/>
-                                                                <constraint firstAttribute="trailing" secondItem="hcX-uH-yzQ" secondAttribute="trailing" id="J7T-PF-YXW"/>
-                                                                <constraint firstItem="s5H-aI-mPI" firstAttribute="top" secondItem="hcX-uH-yzQ" secondAttribute="bottom" id="Ja5-t5-duU"/>
-                                                                <constraint firstAttribute="trailing" secondItem="s5H-aI-mPI" secondAttribute="trailing" id="Kqa-Ak-UA5"/>
-                                                                <constraint firstItem="hcX-uH-yzQ" firstAttribute="leading" secondItem="boA-xn-yrz" secondAttribute="leading" id="pmg-va-ziH"/>
-                                                                <constraint firstItem="hcX-uH-yzQ" firstAttribute="top" secondItem="boA-xn-yrz" secondAttribute="top" id="xGj-vu-hLb"/>
-                                                                <constraint firstItem="s5H-aI-mPI" firstAttribute="leading" secondItem="boA-xn-yrz" secondAttribute="leading" id="zCv-6R-ESM"/>
+                                                                <constraint firstItem="hcX-uH-yzQ" firstAttribute="leading" secondItem="boA-xn-yrz" secondAttribute="leading" id="1TP-hN-i0i"/>
+                                                                <constraint firstItem="jRy-nk-Uwl" firstAttribute="leading" secondItem="boA-xn-yrz" secondAttribute="leading" id="1ba-66-Frc"/>
+                                                                <constraint firstItem="jRy-nk-Uwl" firstAttribute="top" secondItem="boA-xn-yrz" secondAttribute="top" id="8Tg-ih-5mF"/>
+                                                                <constraint firstAttribute="bottom" secondItem="jRy-nk-Uwl" secondAttribute="bottom" id="JB2-Tn-GE1"/>
+                                                                <constraint firstAttribute="bottom" secondItem="hcX-uH-yzQ" secondAttribute="bottom" id="KJ7-vh-k68"/>
+                                                                <constraint firstItem="s5H-aI-mPI" firstAttribute="leading" secondItem="boA-xn-yrz" secondAttribute="leading" id="MMQ-8G-Skh"/>
+                                                                <constraint firstAttribute="trailing" secondItem="s5H-aI-mPI" secondAttribute="trailing" id="aBN-Wl-3Mi"/>
+                                                                <constraint firstItem="s5H-aI-mPI" firstAttribute="top" secondItem="boA-xn-yrz" secondAttribute="top" id="gMR-yC-NxW"/>
+                                                                <constraint firstAttribute="trailing" secondItem="hcX-uH-yzQ" secondAttribute="trailing" id="wWy-bq-zNH"/>
+                                                                <constraint firstAttribute="trailing" secondItem="jRy-nk-Uwl" secondAttribute="trailing" id="wZ2-ma-X3t"/>
+                                                                <constraint firstItem="hcX-uH-yzQ" firstAttribute="top" secondItem="boA-xn-yrz" secondAttribute="top" id="xTv-Zl-4kO"/>
+                                                                <constraint firstAttribute="bottom" secondItem="s5H-aI-mPI" secondAttribute="bottom" id="zDo-gA-HAI"/>
                                                             </constraints>
+                                                            <connections>
+                                                                <outlet property="bgView" destination="jRy-nk-Uwl" id="R2i-ev-wxo"/>
+                                                                <outlet property="imgIcon" destination="hcX-uH-yzQ" id="IF3-9X-St9"/>
+                                                                <outlet property="lbName" destination="s5H-aI-mPI" id="fvu-Ft-cgy"/>
+                                                            </connections>
                                                         </collectionViewCell>
                                                     </cells>
                                                     <connections>

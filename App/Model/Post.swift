@@ -20,6 +20,7 @@ class Post: NSObject, Mappable {
     var desc            : String?
     var avatar_url      : String?
     var name            : String?
+    var discount        : Discount?
     
     init(id             : String,
          quantity       : Int,
@@ -28,7 +29,8 @@ class Post: NSObject, Mappable {
          status         : String,
          desc           : String,
          avatar_url     : String,
-         name           : String )
+         name           : String,
+         discount       : Discount)
     {
         self.id             = id
         self.quantity       = quantity
@@ -39,6 +41,7 @@ class Post: NSObject, Mappable {
         self.desc           = desc
         self.avatar_url     = avatar_url
         self.name           = name
+        self.discount       = discount
     }
     
     required init?(map: Map){
@@ -51,6 +54,7 @@ class Post: NSObject, Mappable {
         desc                <- map["description"]
         avatar_url          <- map["avatar_url"]
         name                <- map["name"]
+        discount            <- map["discount"]
     }
     
     func mapping(map: Map) {
@@ -62,6 +66,7 @@ class Post: NSObject, Mappable {
         desc                <- map["description"]
         avatar_url          <- map["avatar_url"]
         name                <- map["name"]
+        discount            <- map["discount"]
     }
 }
 
@@ -110,5 +115,29 @@ class DataPost: NSObject, Mappable {
     func mapping(map: Map) {
         page                <- map["filter"]
         post                <- map["results"]
+    }
+}
+
+class Discount: NSObject, Mappable {
+    
+    var type            : String?
+    var value           : Double?
+    
+    init(type           : String,
+         value          : Double )
+    {
+        self.type       = type
+        self.value      = value
+    }
+    
+    required init?(map: Map){
+        super.init()
+        type                <- map["type"]
+        value               <- map["value"]
+    }
+    
+    func mapping(map: Map) {
+        type                <- map["type"]
+        value               <- map["value"]
     }
 }

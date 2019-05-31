@@ -29,7 +29,7 @@ class UserViewController: UIViewController, UITableViewDelegate, UITableViewData
             return 150
         }
         else if indexPath.row == 1 {
-            return (self.view.bounds.width/4 - 16) * 3 + 40
+            return (self.view.bounds.width/4) * 3 + 20
         }
         return (80 * 8) + 40
     }
