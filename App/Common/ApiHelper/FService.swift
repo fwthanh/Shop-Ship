@@ -19,6 +19,7 @@ class FService: NSObject {
     static let getConfigUrl         = "index.php?op=api&action=getConfig"
     static let loginUrl             = "api/v1/auth/token"
     static let getProfileUrl        = "api/v1/users/me"
+    static let saveProfileUrl       = "api/v1/users/me"
     ////SHOP////
     static let createProfileShop    = "api/v1/shops"
     static let getProfileShop       = "api/v1/shops/current"
@@ -28,11 +29,16 @@ class FService: NSObject {
     static let createMenuShop       = "api/v1/shops/current/posts"
     static let getPostShop          = "api/v1/shops/current/posts"
     static let editPostShop         = "api/v1/shops/current/posts/"
+    static let shopListBySearch     = "api/v1/shops/search?q=%@&sort=nearby&page=%d&lat=%f&lng=%f"
+    ////POST/////
+    static let listPostOfShop       = "api/v1/shops/%@/posts"
     
     ////MEDIA////
     static let uploadImageUrl       = "api/v1/medias"
+    ////LOCATION////
+    static let saveLocation         = "api/v1/users/me/location"
     
-    
+    // MARK: - REQUEST
     func request (url: String, method: HTTPMethod, params: [String: Any]?, completion: @escaping (_ result: [String: Any]?, _ error: Error?) -> Void) {
         let endpoint: String = FService.baseURLString + url
         Alamofire.request(endpoint, method: method, parameters: params, encoding: JSONEncoding.default, headers: nil).responseJSON {
@@ -156,13 +162,13 @@ class FService: NSObject {
             
             let status: String = result?["status"] as! String
             if status == "success" {
+                Common.role = role
                 if let data = result?["data"] as? [String: Any] {
                     completion(data["token"] as? String, nil)
                 }
                 else {
                     completion(nil, nil)
                 }
-                Common.role = role
             }
             else {
                 completion(nil, result?["message"] as? String)
@@ -179,6 +185,59 @@ class FService: NSObject {
                 if let data = result?["data"] as? [String: Any] {
                     let userInfo = Mapper<User>().map(JSON: data)
                     completion(userInfo, nil)
+                }
+                else {
+                    completion(nil, nil)
+                }
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
+    func saveUserProfile(avatar_id: String,
+                         cover_id: String,
+                         name: String,
+                         address: String,
+                         location: [String: Any],
+                         completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
+        
+        var params = [:] as [String : Any]
+        if avatar_id == "" && cover_id == "" {
+            params = ["name": name,
+                      "address": address,
+                      "location": location ] as [String : Any]
+        }
+        else if avatar_id != "" && cover_id != "" {
+            params = ["avatar_id": avatar_id,
+                      "cover_id": cover_id,
+                      "name": name,
+                      "address": address,
+                      "location": location ] as [String : Any]
+        }
+        else if avatar_id == "" && cover_id != "" {
+            params = ["cover_id": cover_id,
+                      "name": name,
+                      "address": address,
+                      "location": location ] as [String : Any]
+        }
+        else {
+            params = ["avatar_id": avatar_id,
+                      "name": name,
+                      "address": address,
+                      "location": location ] as [String : Any]
+        }
+        
+        requestBody(url: FService.saveProfileUrl, method: .put, params: params) { (result, error) in
+            
+            let status: String = result?["status"] as! String
+            if status == "success" {
+                if (result?["data"] as? [String: Any]) != nil {
+                    self.getUserProfile(completion: { (user, errMsg) in
+                        Common.userInfo = user
+                    })
+                    completion("success", nil)
                 }
                 else {
                     completion(nil, nil)
@@ -291,7 +350,7 @@ class FService: NSObject {
             
             let status: String = result?["status"] as! String
             if status == "success" {
-                if let data = result?["data"] as? [String: Any] {
+                if (result?["data"] as? [String: Any]) != nil {
                     completion("success", nil)
                 }
                 else {
@@ -414,6 +473,86 @@ class FService: NSObject {
             let status: String = result?["status"] as! String
             if status == "success" {
                 completion("success", nil)
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
+    func getShopBySearch(key: String, lat: Double, lng: Double, page: Int, completion: @escaping (_ categories: [Shop]?,_ errMsg: String?) -> ()) -> () {
+        
+        let endpoint = String(format: FService.shopListBySearch, key, page, lat, lng)
+        requestAuthorization(url: endpoint, method: .get, params: nil) { (result, error) in
+            
+            let status: String = result?["status"] as! String
+            if status == "success" {
+                if let data = result?["data"] as? [String: Any] {
+                    
+                    if let resultData = data["results"] as? [[String: Any]] {
+                        let categories  = Mapper<Shop>().mapArray(JSONArray: resultData)
+                        completion(categories, nil)
+                    }
+                    else {
+                        completion([], nil)
+                    }
+                }
+                else {
+                    completion(nil, nil)
+                }
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
+    func saveLocation(location: Location,
+                      completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
+        
+        
+        let params = ["lat": location.lat ?? 0.0,
+                      "lng": location.lng ?? 0.0,
+                      "address": location.address ?? ""] as [String : Any]
+        
+        requestBody(url: FService.saveLocation, method: .put, params: params) { (result, error) in
+            
+            let status: String = result?["status"] as! String
+            if status == "success" {
+                if (result?["data"] as? [String: Any]) != nil {
+                    completion("success", nil)
+                }
+                else {
+                    completion(nil, result?["message"] as? String)
+                }
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
+    // MARK: - POST
+    func getPostOfShop(idShop: String, completion: @escaping (_ categories: [Post]?,_ errMsg: String?) -> ()) -> () {
+        
+        let endpoint = String(format: FService.listPostOfShop, idShop)
+        requestAuthorization(url: endpoint, method: .get, params: nil) { (result, error) in
+            
+            let status: String = result?["status"] as! String
+            if status == "success" {
+                if let data = result?["data"] as? [String: Any] {
+                    
+                    if let resultData = data["results"] as? [[String: Any]] {
+                        let categories  = Mapper<Post>().mapArray(JSONArray: resultData)
+                        completion(categories, nil)
+                    }
+                    else {
+                        completion([], nil)
+                    }
+                }
+                else {
+                    completion(nil, nil)
+                }
             }
             else {
                 completion(nil, result?["message"] as? String)

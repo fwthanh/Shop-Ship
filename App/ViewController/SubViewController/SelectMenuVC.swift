@@ -13,10 +13,13 @@ class SelectMenuVC: UIViewController {
     @IBOutlet weak var btnLess: UIButton!
     @IBOutlet weak var btnMore: UIButton!
     @IBOutlet weak var btnCancel: UIButton!
+    @IBOutlet weak var lbTitle: UILabel!
+    @IBOutlet weak var lbDescription: UILabel!
     @IBOutlet weak var lbNumber: UILabel!
     @IBOutlet weak var lbMoney: UILabel!
     
-    var countSelected: Int = 1
+    var postInfo: Post?
+    var countSelected: Int = 0
     var moneySelected: Double = 0
     var dismissDialogBlock: ((Int) -> Void)?
     
@@ -38,14 +41,18 @@ class SelectMenuVC: UIViewController {
         btnCancel.layer.borderColor = UIColor.lightGray.cgColor
         btnCancel.layer.masksToBounds = true
         
-        self.btnLess.isEnabled = false
+        countSelected = postInfo?.numSelected ?? 0
+        
+        self.btnLess.isEnabled = countSelected > 0
+        self.lbTitle.text = postInfo?.name
+        self.lbDescription.text = postInfo?.desc
         self.lbNumber.text = "\(countSelected)"
-        self.moneySelected = 50000
+        self.moneySelected = postInfo?.price ?? 0.0
         self.lbMoney.text = self.moneySelected._vnCurrencyString
     }
     
     @IBAction func dismissDialog(_ sender: UIButton) {
-        if let dismissDialogBlock = self.dismissDialogBlock { dismissDialogBlock(sender.tag == 1 ? countSelected : 0) }
+        self.dismissDialogBlock?(sender.tag == 1 ? countSelected : -1)
     }
     
     @IBAction func moreItem(_ sender: UIButton) {
@@ -63,7 +70,7 @@ class SelectMenuVC: UIViewController {
         lbNumber.text = "\(countSelected)"
         let money: Double = self.moneySelected * Double(countSelected)
         self.lbMoney.text = money._vnCurrencyString
-        if countSelected == 1 {
+        if countSelected == 0 {
             self.btnLess.isEnabled = false
         }
     }

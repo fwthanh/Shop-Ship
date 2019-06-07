@@ -20,6 +20,7 @@ class Post: NSObject, Mappable {
     var desc            : String?
     var avatar_url      : String?
     var name            : String?
+    var numSelected     : Int = 0
     var discount        : Discount?
     
     init(id             : String,
@@ -30,6 +31,7 @@ class Post: NSObject, Mappable {
          desc           : String,
          avatar_url     : String,
          name           : String,
+         numSelected    : Int = 0,
          discount       : Discount)
     {
         self.id             = id
@@ -41,6 +43,7 @@ class Post: NSObject, Mappable {
         self.desc           = desc
         self.avatar_url     = avatar_url
         self.name           = name
+        self.numSelected    = numSelected
         self.discount       = discount
     }
     

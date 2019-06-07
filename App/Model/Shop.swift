@@ -22,6 +22,7 @@ class Shop: NSObject, NSCoding, Mappable {
     var contact         : String?
     var cc_contact      : String?
     var category        : Category?
+    var location        : Location?
     
     init(id             : String,
          email          : String,
@@ -32,7 +33,8 @@ class Shop: NSObject, NSCoding, Mappable {
          phone_contact  : String,
          contact        : String,
          cc_contact     : String,
-         category       : Category )
+         category       : Category,
+         location       : Location )
     {
         self.id             = id
         self.address        = address
@@ -43,6 +45,7 @@ class Shop: NSObject, NSCoding, Mappable {
         self.contact        = contact
         self.cc_contact     = cc_contact
         self.category       = category
+        self.location       = location
     }
     
     required init?(map: Map){
@@ -56,6 +59,7 @@ class Shop: NSObject, NSCoding, Mappable {
         contact             <- map["phone.contact"]
         cc_contact          <- map["phone.cc"]
         category            <- map["category"]
+        location            <- map["location"]
     }
     
     func mapping(map: Map) {
@@ -68,6 +72,7 @@ class Shop: NSObject, NSCoding, Mappable {
         contact             <- map["phone.contact"]
         cc_contact          <- map["phone.cc"]
         category            <- map["category"]
+        location            <- map["location"]
     }
     
     required init?(coder aDecoder: NSCoder) {

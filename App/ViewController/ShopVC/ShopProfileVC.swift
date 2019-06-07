@@ -24,7 +24,6 @@ class ShopProfileVC: UIViewController {
     @IBOutlet weak var btnChooseCategory: UIButton!
     @IBOutlet weak var btnEditAvata: UIButton!
     
-    var isEditingName: Bool = false
     var idImgUpload: String = ""
     var idImgCoverUpload: String = ""
     var listCategory: [Category]?
@@ -37,7 +36,7 @@ class ShopProfileVC: UIViewController {
         btnLogout.layer.cornerRadius = 5.0
         btnLogout.layer.masksToBounds = true
         
-        imgAvata.layer.cornerRadius = 40.0
+        imgAvata.layer.cornerRadius = 50.0
         imgAvata.layer.borderWidth = 2.0
         imgAvata.layer.borderColor = UIColor(hexString: "#f2f3f4").cgColor
         imgAvata.layer.masksToBounds = true

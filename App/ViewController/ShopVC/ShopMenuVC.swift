@@ -61,9 +61,9 @@ class ShopMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             cell.lbDesc.text = postInfo.desc
             cell.lbPrice.text = postInfo.price?._vnCurrencyString
             cell.imgAvata.kf.setImage(with: URL(string: postInfo.avatar_url ?? ""),
-                                 placeholder: UIImage(named: "ic_food"),
+                                 placeholder: UIImage(named: "img_placeholder"),
                                  completionHandler: { (image, _, _, _ ) in
-                                    cell.imgAvata.image = image })
+                                    cell.imgAvata.image = image ?? UIImage(named: "img_placeholder")})
             return cell
         }
         else {

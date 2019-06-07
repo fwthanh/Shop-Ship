@@ -55,6 +55,15 @@ struct Common {
             ACUserDefault?[.curentShopInfo] = newValue
         }
     }
+    
+    static var curentLocation : Location? {
+        get {
+            return ACUserDefault?[.curentLocation]
+        }
+        set {
+            ACUserDefault?[.curentLocation] = newValue
+        }
+    }
 }
 
 extension DefaultsKeys {
@@ -62,6 +71,7 @@ extension DefaultsKeys {
     static let role             = DefaultsKey<String?>("role")
     static let curentUserInfo   = DefaultsKey<User?>("curentUserInfo")
     static let curentShopInfo   = DefaultsKey<Shop?>("curentShopInfo")
+    static let curentLocation   = DefaultsKey<Location?>("curentLocation")
 }
 
 extension UserDefaults {
@@ -84,6 +94,17 @@ extension UserDefaults {
         }
         set {
             NSKeyedUnarchiver.setClass(Shop.self, forClassName: "Shop")
+            archive(key, newValue)
+        }
+    }
+    
+    subscript(key: DefaultsKey<Location?>) -> Location? {
+        get {
+            NSKeyedArchiver.setClassName("Location", for: Location.self)
+            return unarchive(key)
+        }
+        set {
+            NSKeyedUnarchiver.setClass(Location.self, forClassName: "Location")
             archive(key, newValue)
         }
     }

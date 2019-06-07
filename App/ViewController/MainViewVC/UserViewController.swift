@@ -7,62 +7,186 @@
 //
 
 import UIKit
+import CoreLocation
+import PullToRefresh
+import MapKit
 
 class UserViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    @IBOutlet weak var tfAddress: UITextField!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableSearchView: UITableView!
+    
+    var locationManager: CLLocationManager!
+    
+    var listCategory: [Category]?
+    var listShop: [Shop]?
+    
+    var searchCompleter = MKLocalSearchCompleter()
+    var searchResults = [MKLocalSearchCompletion]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         // (optional) include this line if you want to remove the extra empty cell divider lines
         self.tableView.tableFooterView = UIView()
+        self.tableSearchView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        self.tableSearchView.tableFooterView = UIView()
+        self.tableSearchView.isHidden = true
+        self.searchCompleter.delegate = self
+        
+        FService.sharedInstance.getCategories { (categories, errMsg) in
+            self.listCategory = categories
+            self.tableView.reloadData()
+        }
+        
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(tfAddress.text ?? "") { (placemarks, error) in }
+        if let currentAddress = Common.curentLocation?.address  {
+            self.tfAddress.text = currentAddress
+        }
+        else {
+            locationManager = CLLocationManager()
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.requestAlwaysAuthorization()
+            
+            if CLLocationManager.locationServicesEnabled(){
+                locationManager.startUpdatingLocation()
+            }
+        }
+        
+        let refresher = PullToRefresh()
+        tableView.addPullToRefresh(refresher) {
+            let delayTime = DispatchTime.now() + Double(Int64(2 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+            DispatchQueue.main.asyncAfter(deadline: delayTime) {
+                self.tableView.endRefreshing(at: .top)
+            }
+        }
+        
+        self.refreshAllData()
     }
 
+    func refreshAllData() {
+        FService.sharedInstance.getShopBySearch(key: "", lat: Common.curentLocation?.lat ?? 0.0, lng: Common.curentLocation?.lng ?? 0.0, page: 1) { (shops, message) in
+            self.listShop = shops
+            self.tableView.reloadData()
+        }
+    }
+    
+    func getAddress(placemark: CLPlacemark) -> String {
+        var addressString : String = ""
+        if placemark.thoroughfare != nil {
+            addressString = addressString + (placemark.subThoroughfare ?? "") + ", "
+        }
+        if placemark.thoroughfare != nil {
+            addressString = addressString + (placemark.thoroughfare ?? "") + ", "
+        }
+        if placemark.subLocality != nil {
+            addressString = addressString + (placemark.subLocality ?? "") + ", "
+        }
+        if placemark.subLocality != nil {
+            addressString = addressString + (placemark.subAdministrativeArea ?? "") + ", "
+        }
+        if placemark.locality != nil {
+            addressString = addressString + (placemark.locality ?? "")
+        }
+        return addressString
+    }
+    
     // number of rows in table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        if tableView == self.tableView {
+            return 3
+        }
+        return self.searchResults.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0 {
-            return 150
+        if tableView == self.tableView {
+            if indexPath.row == 0 {
+                return 150
+            }
+            else if indexPath.row == 1 {
+                var maxRow = 0
+                let row = (self.listCategory?.count ?? 0) % 4
+                if row > 0 && (self.listCategory?.count ?? 0) < 4 {
+                    maxRow = 1
+                }
+                else if row > 0 {
+                    maxRow = (self.listCategory?.count ?? 0)/4 + 1
+                }
+                else {
+                    maxRow = (self.listCategory?.count ?? 0)/4
+                }
+                return (self.view.bounds.width/4) * CGFloat(maxRow) + CGFloat(maxRow * 15)
+            }
+            return CGFloat((80 * (self.listShop?.count ?? 0)) + 40)
         }
-        else if indexPath.row == 1 {
-            return (self.view.bounds.width/4) * 3 + 20
+        else {
+            return 40.0
         }
-        return (80 * 8) + 40
     }
     
     // create a cell for each table view row
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // create a new cell if needed or reuse an old one
-        if indexPath.row == 0, let cell: TblHeaderCell = self.tableView.dequeueReusableCell(withIdentifier: "TblHeaderCell") as? TblHeaderCell {
-            cell.backgroundColor = .lightGray
-            cell.selectionStyle = .none
+        if tableView == self.tableView {
+            if indexPath.row == 0, let cell: TblHeaderCell = self.tableView.dequeueReusableCell(withIdentifier: "TblHeaderCell") as? TblHeaderCell {
+                cell.backgroundColor = .lightGray
+                cell.selectionStyle = .none
+                return cell
+            }
+            else if  indexPath.row == 1 ,let cell: CategoriesViewCell = self.tableView.dequeueReusableCell(withIdentifier: "CategoriesViewCell") as? CategoriesViewCell {
+                cell.delegate = self
+                cell.listCategory = self.listCategory
+                cell.collectionView.reloadData()
+                return cell
+            }
+            else if  indexPath.row == 2 ,let cell: DeliveringViewCell = self.tableView.dequeueReusableCell(withIdentifier: "DeliveringViewCell") as? DeliveringViewCell {
+                cell.listShop = self.listShop
+                cell.collectionView.reloadData()
+                cell.selectPostBlock = { [weak self] (shop) in
+                    guard let strongSelf = self else { return }
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let viewController: MenuShopVC = storyboard.instantiateViewController(withIdentifier: "MenuShopVC") as! MenuShopVC
+                    viewController.shopInfo = shop
+                    strongSelf.navigationController?.pushViewController(viewController, animated: true)
+                }
+                return cell
+            }
+        }
+        else if tableView == self.tableSearchView {
+            let cell: UITableViewCell = self.tableView.dequeueReusableCell(withIdentifier: "UITableViewCell") ?? UITableViewCell()
+            let value = self.searchResults[indexPath.row]
+            cell.textLabel?.text = value.title + ", " + value.subtitle
+            cell.textLabel?.font = UIFont.systemFont(ofSize: 13)
             return cell
         }
-        else if  indexPath.row == 1 ,let cell: CategoriesViewCell = self.tableView.dequeueReusableCell(withIdentifier: "CategoriesViewCell") as? CategoriesViewCell {
-            cell.delegate = self
-            return cell
-        }
-        else if  indexPath.row == 2 ,let cell: DeliveringViewCell = self.tableView.dequeueReusableCell(withIdentifier: "DeliveringViewCell") as? DeliveringViewCell {
-            return cell
-        }
-        else {
-            return UITableViewCell()
-        }
+        return UITableViewCell()
     }
     
     // method to run when table view cell is tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("You tapped cell number \(indexPath.row).")
+        if tableView == self.tableView {
+            if let shop = self.listShop?[indexPath.row] {
+                let menuShop = MenuShopVC()
+                menuShop.shopInfo = shop
+                self.navigationController?.pushViewController(menuShop, animated: true)
+            }
+        }
+        else {
+            self.view.endEditing(true)
+            let value = self.searchResults[indexPath.row]
+            self.tfAddress.text = value.title + ", " + value.subtitle
+            tableView.isHidden = true
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "SelectMenu" {
-            let viewController: MenuShopVC = segue.destination as! MenuShopVC
-            viewController.idShop = 1
+//            let viewController: MenuShopVC = segue.destination as! MenuShopVC
+//            viewController.idShop = ""
         }
     }
 }
@@ -70,5 +194,83 @@ class UserViewController: UIViewController, UITableViewDelegate, UITableViewData
 extension UserViewController: CategoryDelegate {
     func syncContactChanged(isOn: Bool) {
         self.performSegue(withIdentifier: "SelectMenu", sender: self)
+    }
+}
+
+extension UserViewController: UITextFieldDelegate {
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.tableSearchView.isHidden = false
+        searchCompleter.queryFragment = textField.text ?? ""
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField.text != "" && textField.text != Common.curentLocation?.address {
+            let geocoder = CLGeocoder()
+            geocoder.geocodeAddressString(tfAddress.text ?? "") { (placemarks, error) in
+                if let placemark = placemarks?.first, placemark.isoCountryCode == "VN" {
+                    let lat = placemark.location?.coordinate.latitude ?? 0.0
+                    let long = placemark.location?.coordinate.longitude ?? 0.0
+                    Common.curentLocation = Location(lat: lat, lng: long, address: self.tfAddress.text ?? "")
+                    FService.sharedInstance.saveLocation(location: Location(lat: lat, lng: long, address: self.tfAddress.text ?? ""), completion: { (success, errMsg) in
+                        //OK
+                    })
+                    self.refreshAllData()
+                }
+                else {
+                    self.tfAddress.text = Common.curentLocation?.address
+                }
+            }
+        }
+        else {
+            self.tfAddress.text = Common.curentLocation?.address
+        }
+        self.tableSearchView.isHidden = true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = textField.text, let textRange = Range(range, in: text) {
+            let updatedText = text.replacingCharacters(in: textRange, with: string)
+            searchCompleter.queryFragment = updatedText
+        }
+        self.tableSearchView.isHidden = false
+        return true
+    }
+}
+
+extension UserViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let userLocation: CLLocation = locations[0] as CLLocation
+        
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(userLocation) { (placemarks, error) in
+            if (error != nil){
+                print("error in reverseGeocode")
+            }
+            let placemark = placemarks! as [CLPlacemark]
+            if placemark.count > 0 {
+                let placemark = placemarks![0]
+                let addressString = self.getAddress(placemark: placemark)
+                self.tfAddress.text = addressString
+                let currentLocation = Location(lat: userLocation.coordinate.latitude, lng: userLocation.coordinate.longitude, address: addressString)
+                Common.curentLocation = currentLocation
+            }
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error \(error)")
+    }
+}
+
+extension UserViewController: MKLocalSearchCompleterDelegate {
+    
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        self.searchResults = completer.results
+        self.tableSearchView.reloadData()
+    }
+    
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        
     }
 }

@@ -5,6 +5,7 @@ PODS:
   - LSDialogViewController (3.2)
   - ObjectMapper (3.4.2)
   - PKHUD (5.2.1)
+  - PullToRefresher (3.1)
   - ReachabilitySwift (4.3.1)
   - SwiftValidator (4.0.0)
   - SwiftyUserDefaults (3.0.1)
@@ -16,6 +17,7 @@ DEPENDENCIES:
   - LSDialogViewController
   - ObjectMapper (~> 3.4)
   - PKHUD
+  - PullToRefresher (~> 3.1)
   - ReachabilitySwift
   - SwiftValidator (from `https://github.com/jpotts18/SwiftValidator.git`, tag `4.2.0`)
   - SwiftyUserDefaults
@@ -28,6 +30,7 @@ SPEC REPOS:
     - LSDialogViewController
     - ObjectMapper
     - PKHUD
+    - PullToRefresher
     - ReachabilitySwift
     - SwiftyUserDefaults
 
@@ -48,10 +51,11 @@ SPEC CHECKSUMS:
   LSDialogViewController: 921fd68b78b595152e5493a927368046993e56da
   ObjectMapper: 0d4402610f4e468903ae64629eec4784531e5c51
   PKHUD: 4e6162c4c39ac367c6934e9855c6b4762ee16256
+  PullToRefresher: ec8c1942bd61bb512ff520c49f9f00903cfa86c7
   ReachabilitySwift: 4032e2f59586e11e3b0ebe15b167abdd587a388b
   SwiftValidator: 58c155c8ae8421ef716a96e52a49984dd54c700c
   SwiftyUserDefaults: 3d273b1739b68ada3145dc754a70ec775bc5c8be
 
-PODFILE CHECKSUM: 9223bfe1dd8268b1088866fd5bee2546f71344c8
+PODFILE CHECKSUM: 57dec159fae5900c2f41e89ce11fc66a320f5e14
 
 COCOAPODS: 1.6.1

@@ -44,6 +44,7 @@
 		4297602A226B599000D5E196 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42976029226B599000D5E196 /* LoginViewController.swift */; };
 		42976033226B5BBB00D5E196 /* ViewExtentsion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42976032226B5BBB00D5E196 /* ViewExtentsion.swift */; };
 		42976035226B61C500D5E196 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42976034226B61C500D5E196 /* ColorExtension.swift */; };
+		4299D01B22A9525500756451 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4299D01A22A9525500756451 /* Location.swift */; };
 		429E7F3A22975F2500F0275D /* CreateMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429E7F3922975F2500F0275D /* CreateMenuVC.swift */; };
 /* End PBXBuildFile section */
 
@@ -88,6 +89,7 @@
 		42976029226B599000D5E196 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		42976032226B5BBB00D5E196 /* ViewExtentsion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtentsion.swift; sourceTree = "<group>"; };
 		42976034226B61C500D5E196 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		4299D01A22A9525500756451 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		429E7F3922975F2500F0275D /* CreateMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMenuVC.swift; sourceTree = "<group>"; };
 		7C5FE8429FED400F9D84E72F /* Pods-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.debug.xcconfig"; path = "Target Support Files/Pods-App/Pods-App.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -258,6 +260,7 @@
 				42899ADA2292D79E0021BF59 /* Shipper.swift */,
 				42943A53229449F900464058 /* Category.swift */,
 				428BA48822982A18006C4CB1 /* Post.swift */,
+				4299D01A22A9525500756451 /* Location.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -373,6 +376,7 @@
 				"${BUILT_PRODUCTS_DIR}/LSDialogViewController/LSDialogViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
 				"${BUILT_PRODUCTS_DIR}/PKHUD/PKHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/PullToRefresher/PullToRefresh.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftValidator/SwiftValidator.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyUserDefaults/SwiftyUserDefaults.framework",
@@ -386,6 +390,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LSDialogViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PKHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PullToRefresh.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftValidator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyUserDefaults.framework",
@@ -468,6 +473,7 @@
 				429364E7226C680C00E74FA0 /* DeliveringCollectionCell.swift in Sources */,
 				428E969C227F127000CA8F00 /* MenuShopVC.swift in Sources */,
 				428546AA22846DA800C14A8B /* ItemTableViewCell.swift in Sources */,
+				4299D01B22A9525500756451 /* Location.swift in Sources */,
 				428E969E227F19A400CA8F00 /* MenuTableViewCell.swift in Sources */,
 				42899AD92292D7900021BF59 /* Shop.swift in Sources */,
 				425968A52263ECA500B6256A /* AppDelegate.swift in Sources */,
@@ -628,7 +634,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = EE2V9KDD6C;
 				INFOPLIST_FILE = App/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -648,7 +654,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = EE2V9KDD6C;
 				INFOPLIST_FILE = App/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

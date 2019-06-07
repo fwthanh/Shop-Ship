@@ -15,5 +15,6 @@ target 'App' do
   pod 'LSDialogViewController'
   pod 'SwiftyUserDefaults'
   pod 'SwiftValidator', :git => 'https://github.com/jpotts18/SwiftValidator.git', :tag => '4.2.0'
+  pod 'PullToRefresher', '~> 3.1'
   
 end
