@@ -60,7 +60,7 @@ class SelectMenuVC: UIViewController {
         lbNumber.text = "\(countSelected)"
         let money: Double = self.moneySelected * Double(countSelected)
         self.lbMoney.text = money._vnCurrencyString
-        if countSelected > 1 {
+        if countSelected > 0 {
             self.btnLess.isEnabled = true
         }
     }

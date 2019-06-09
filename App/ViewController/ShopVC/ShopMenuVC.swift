@@ -23,7 +23,7 @@ class ShopMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         self.tableView.tableFooterView = UIView()
         
-        FService.sharedInstance.getShopProfile { (shop, errMsg) in
+        FService.sharedInstance.getShopProfile(idShop: "current") { (shop, errMsg) in
             if shop == nil && errMsg == nil {
                 let alert = UIAlertController(title: "Cập nhật thông tin", message: "Vui lòng cập nhật thông tin của bạn!", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in

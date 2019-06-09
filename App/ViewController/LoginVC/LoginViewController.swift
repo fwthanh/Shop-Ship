@@ -66,7 +66,7 @@ class LoginViewController: UIViewController, AKFViewControllerDelegate {
                     })
                 }
                 else if Common.role == "shop" {
-                    FService.sharedInstance.getShopProfile(completion: { (shop, errMsg) in
+                    FService.sharedInstance.getShopProfile(idShop: "current", completion: { (shop, errMsg) in
                         if shop != nil {
                             Common.shopInfo = shop
                             let appDelegate = UIApplication.shared.delegate as! AppDelegate

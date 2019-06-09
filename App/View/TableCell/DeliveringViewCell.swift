@@ -14,7 +14,8 @@ class DeliveringViewCell: UITableViewCell, UICollectionViewDelegate, UICollectio
     @IBOutlet weak var collectionView: UICollectionView!
     
     var listShop: [Shop]?
-    var selectPostBlock: ((Shop) -> Void)?
+    var selectPostBlock: ((Shop, Double) -> Void)?
+    var currentDistance: Double = 0.0
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -54,6 +55,7 @@ class DeliveringViewCell: UITableViewCell, UICollectionViewDelegate, UICollectio
                 let coordinate1 = CLLocation(latitude: lat ?? 0.0, longitude: lon ?? 0.0)
                 let coordinate2 = CLLocation(latitude: shop.location?.lat ?? 0.0, longitude: shop.location?.lng ?? 0.0)
                 let distanceInMeters = coordinate1.distance(from: coordinate2)
+                self.currentDistance = distanceInMeters
                 cell.lbDetail.text = String(format: "%.2f km", distanceInMeters/1000)
             }
         }
@@ -65,7 +67,7 @@ class DeliveringViewCell: UITableViewCell, UICollectionViewDelegate, UICollectio
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // handle tap events
         if let shop = self.listShop?[indexPath.row] {
-            self.selectPostBlock?(shop)
+            self.selectPostBlock?(shop, self.currentDistance)
         }
     }
 

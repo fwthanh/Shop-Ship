@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 import LSDialogViewController
 
 class MenuShopVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -16,8 +17,11 @@ class MenuShopVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var lbName: UILabel!
     @IBOutlet weak var lbAddress: UILabel!
     
+    var shopId: String?
     var shopInfo: Shop?
     var listPost: [Post] = [Post]()
+    var currentDistance: Double = 0.0
+    
     let btnCart = UIButton.init(frame: CGRect.init(x: 0, y: 0, width: 30, height: 30))
     let lblBadge = UILabel.init(frame: CGRect.init(x: 20, y: 0, width: 16, height: 16))
     
@@ -40,19 +44,42 @@ class MenuShopVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         btnCart.addSubview(lblBadge)
         self.navigationItem.rightBarButtonItems = [UIBarButtonItem.init(customView: btnCart)]
         
-        self.lbName.text = shopInfo?.name
-        self.lbAddress.text = shopInfo?.address
-        self.imgCover.kf.setImage(with: URL(string: shopInfo?.cover_url ?? ""), placeholder: UIImage(named: "img_placeholder"), completionHandler: { (image, _, _, _ ) in
-            self.imgCover.image = image ?? UIImage(named: "img_placeholder")
-        })
-        self.btnCart.isEnabled = false
-        
-        FService.sharedInstance.getPostOfShop(idShop: shopInfo?.id ?? "") { (posts, errMsg) in
-            if errMsg == nil {
-                self.listPost = posts ?? []
-                self.tableView.reloadData()
+        if shopId != nil && shopInfo == nil {
+            FService.sharedInstance.getShopProfile(idShop: shopId ?? "") { (shop, errMsg) in
+                self.shopInfo = shop
+                self.lbName.text = self.shopInfo?.name
+                self.lbAddress.text = self.shopInfo?.address
+                self.imgCover.kf.setImage(with: URL(string: self.shopInfo?.cover_url ?? ""), placeholder: UIImage(named: "img_placeholder"), completionHandler: { (image, _, _, _ ) in
+                    self.imgCover.image = image ?? UIImage(named: "img_placeholder")
+                })
+                let coordinate1 = CLLocation(latitude: Common.curentLocation?.lat ?? 0.0, longitude: Common.curentLocation?.lng ?? 0.0)
+                let coordinate2 = CLLocation(latitude: shop?.location?.lat ?? 0.0, longitude: shop?.location?.lng ?? 0.0)
+                let distanceInMeters = coordinate1.distance(from: coordinate2)
+                self.currentDistance = distanceInMeters
+                
+                FService.sharedInstance.getPostOfShop(idShop: self.shopInfo?.id ?? "") { (posts, errMsg) in
+                    if errMsg == nil {
+                        self.listPost = posts ?? []
+                        self.tableView.reloadData()
+                    }
+                }
             }
         }
+        else {
+            self.lbName.text = shopInfo?.name
+            self.lbAddress.text = shopInfo?.address
+            self.imgCover.kf.setImage(with: URL(string: shopInfo?.cover_url ?? ""), placeholder: UIImage(named: "img_placeholder"), completionHandler: { (image, _, _, _ ) in
+                self.imgCover.image = image ?? UIImage(named: "img_placeholder")
+            })
+            FService.sharedInstance.getPostOfShop(idShop: shopInfo?.id ?? "") { (posts, errMsg) in
+                if errMsg == nil {
+                    self.listPost = posts ?? []
+                    self.tableView.reloadData()
+                }
+            }
+        }
+        
+        self.btnCart.isEnabled = false
     }
     
     // number of rows in table view
@@ -124,8 +151,13 @@ class MenuShopVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "OrderInfo" {
+            let postSelected = self.listPost.filter {
+                $0.numSelected > 0
+            }
             let viewController: OrderInfoViewController = segue.destination as! OrderInfoViewController
-            //viewController.idShop = 1
+            viewController.listPost = postSelected
+            viewController.shopInfo = self.shopInfo
+            viewController.currentDistance = self.currentDistance
         }
     }
 }

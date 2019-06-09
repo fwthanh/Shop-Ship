@@ -1,18 +1,17 @@
 //
-//  ItemTableViewCell.swift
+//  EmptyTableViewCell.swift
 //  App
 //
-//  Created by Pqt Dark on 5/9/19.
+//  Created by Pqt Dark on 6/9/19.
 //  Copyright © 2019 Pqt. All rights reserved.
 //
 
 import UIKit
 
-class ItemTableViewCell: UITableViewCell {
+class EmptyTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var lbName: UILabel!
-    @IBOutlet weak var lbPrice: UILabel!
-    @IBOutlet weak var lbQuaity: UILabel!
+    @IBOutlet weak var imgAvata: UIImageView!
+    @IBOutlet weak var lbTitle: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

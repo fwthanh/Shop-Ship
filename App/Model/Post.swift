@@ -20,6 +20,7 @@ class Post: NSObject, Mappable {
     var desc            : String?
     var avatar_url      : String?
     var name            : String?
+    var post_name            : String?
     var numSelected     : Int = 0
     var discount        : Discount?
     
@@ -31,6 +32,7 @@ class Post: NSObject, Mappable {
          desc           : String,
          avatar_url     : String,
          name           : String,
+         post_name      : String,
          numSelected    : Int = 0,
          discount       : Discount)
     {
@@ -43,6 +45,7 @@ class Post: NSObject, Mappable {
         self.desc           = desc
         self.avatar_url     = avatar_url
         self.name           = name
+        self.post_name      = post_name
         self.numSelected    = numSelected
         self.discount       = discount
     }
@@ -57,6 +60,7 @@ class Post: NSObject, Mappable {
         desc                <- map["description"]
         avatar_url          <- map["avatar_url"]
         name                <- map["name"]
+        post_name           <- map["post_name"]
         discount            <- map["discount"]
     }
     
@@ -69,6 +73,7 @@ class Post: NSObject, Mappable {
         desc                <- map["description"]
         avatar_url          <- map["avatar_url"]
         name                <- map["name"]
+        post_name           <- map["post_name"]
         discount            <- map["discount"]
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol CategoryDelegate: class {
-    func syncContactChanged(isOn: Bool)
+    func selectCategory(categoryId: String)
 }
 
 class CategoriesViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout  {
@@ -53,7 +53,9 @@ class CategoriesViewCell: UITableViewCell, UICollectionViewDelegate, UICollectio
     // MARK: - UICollectionViewDelegate protocol
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // handle tap events
-        self.delegate?.syncContactChanged(isOn: true)
+        if let category: Category = self.listCategory?[indexPath.row] {
+            self.delegate?.selectCategory(categoryId: category.id ?? "")
+        }
     }
 
 }

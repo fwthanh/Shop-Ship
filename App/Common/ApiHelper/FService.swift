@@ -20,9 +20,11 @@ class FService: NSObject {
     static let loginUrl             = "api/v1/auth/token"
     static let getProfileUrl        = "api/v1/users/me"
     static let saveProfileUrl       = "api/v1/users/me"
+    static let getOrderHistory      = "api/v1/users/me/orders"
+    
     ////SHOP////
     static let createProfileShop    = "api/v1/shops"
-    static let getProfileShop       = "api/v1/shops/current"
+    static let getProfileShop       = "api/v1/shops/%@"
     static let saveProfileShop      = "api/v1/shops/current"
     static let getCategories        = "api/v1/categories"
     static let getMenuShop          = "api/v1/shops/current/categories"
@@ -30,13 +32,21 @@ class FService: NSObject {
     static let getPostShop          = "api/v1/shops/current/posts"
     static let editPostShop         = "api/v1/shops/current/posts/"
     static let shopListBySearch     = "api/v1/shops/search?q=%@&sort=nearby&page=%d&lat=%f&lng=%f"
+    static let getPendingPostShop   = "api/v1/shops/current/orders/pending"
+    static let getShopByCategory    = "api/v1/shops?cat=%@&lat=%f&lng=%f&page=%d"
     ////POST/////
     static let listPostOfShop       = "api/v1/shops/%@/posts"
+    ////ORDER///
+    static let createOrder          = "api/v1/orders"
+    static let curentOrder          = "api/v1/orders/current"
+    static let cancelOrder          = "api/v1/orders/%@/cancel"
+    static let historyOrder         = "api/v1/users/me/orders"
     
     ////MEDIA////
     static let uploadImageUrl       = "api/v1/medias"
     ////LOCATION////
     static let saveLocation         = "api/v1/users/me/location"
+    static let featuredBanner       = "api/v1/features/banner"
     
     // MARK: - REQUEST
     func request (url: String, method: HTTPMethod, params: [String: Any]?, completion: @escaping (_ result: [String: Any]?, _ error: Error?) -> Void) {
@@ -249,6 +259,31 @@ class FService: NSObject {
         }
     }
     
+    func getUserHistory(completion: @escaping (_ categories: [CurrentOrder]?,_ errMsg: String?) -> ()) -> () {
+        
+        requestAuthorization(url: FService.historyOrder, method: .get, params: nil) { (result, error) in
+            
+            let status: String = result?["status"] as! String
+            if status == "success" {
+                if let data = result?["data"] as? [String: Any] {
+                    
+                    if let resultData = data["results"] as? [[String: Any]] {
+                        let categories  = Mapper<CurrentOrder>().mapArray(JSONArray: resultData)
+                        completion(categories, nil)
+                    }
+                    else {
+                        completion([], nil)
+                    }
+                }
+                else {
+                    completion(nil, nil)
+                }
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
     // MARK: - SHOP
     func getCategories(completion: @escaping (_ categories: [Category]?,_ errMsg: String?) -> ()) -> () {
         
@@ -308,9 +343,10 @@ class FService: NSObject {
         }
     }
     
-    func getShopProfile( completion: @escaping (_ shop: Shop?,_ errMsg: String?) -> ()) -> () {
+    func getShopProfile(idShop: String, completion: @escaping (_ shop: Shop?,_ errMsg: String?) -> ()) -> () {
 
-        requestAuthorization(url: FService.getProfileShop, method: .get, params: nil) { (result, error) in
+        let endpoint = String(format: FService.getProfileShop, idShop)
+        requestAuthorization(url: endpoint, method: .get, params: nil) { (result, error) in
             
             let status: String = result?["status"] as! String
             if status == "success" {
@@ -481,12 +517,9 @@ class FService: NSObject {
     }
     
     func getShopBySearch(key: String, lat: Double, lng: Double, page: Int, completion: @escaping (_ categories: [Shop]?,_ errMsg: String?) -> ()) -> () {
-        
         let endpoint = String(format: FService.shopListBySearch, key, page, lat, lng)
         requestAuthorization(url: endpoint, method: .get, params: nil) { (result, error) in
-            
-            let status: String = result?["status"] as! String
-            if status == "success" {
+            if let status: String = result?["status"] as? String, status == "success" {
                 if let data = result?["data"] as? [String: Any] {
                     
                     if let resultData = data["results"] as? [[String: Any]] {
@@ -507,18 +540,40 @@ class FService: NSObject {
         }
     }
     
+    func getShopByCategory(categoryId: String, lat: Double, lng: Double, page: Int, completion: @escaping (_ shops: [Shop]?,_ errMsg: String?) -> ()) -> () {
+        
+        let endpoint = String(format: FService.getShopByCategory, categoryId, lat, lng, page)
+        requestAuthorization(url: endpoint, method: .get, params: nil) { (result, error) in
+            if let status: String = result?["status"] as? String, status == "success" {
+                if let data = result?["data"] as? [String: Any] {
+                    
+                    if let resultData = data["results"] as? [[String: Any]] {
+                        let categories  = Mapper<Shop>().mapArray(JSONArray: resultData)
+                        completion(categories, nil)
+                    }
+                    else {
+                        completion([], nil)
+                    }
+                }
+                else {
+                    completion(nil, result?["message"] as? String)
+                }
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
     func saveLocation(location: Location,
                       completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
-        
         
         let params = ["lat": location.lat ?? 0.0,
                       "lng": location.lng ?? 0.0,
                       "address": location.address ?? ""] as [String : Any]
         
         requestBody(url: FService.saveLocation, method: .put, params: params) { (result, error) in
-            
-            let status: String = result?["status"] as! String
-            if status == "success" {
+            if let status: String = result?["status"] as? String, status == "success" {
                 if (result?["data"] as? [String: Any]) != nil {
                     completion("success", nil)
                 }
@@ -537,9 +592,7 @@ class FService: NSObject {
         
         let endpoint = String(format: FService.listPostOfShop, idShop)
         requestAuthorization(url: endpoint, method: .get, params: nil) { (result, error) in
-            
-            let status: String = result?["status"] as! String
-            if status == "success" {
+            if let status: String = result?["status"] as? String, status == "success" {
                 if let data = result?["data"] as? [String: Any] {
                     
                     if let resultData = data["results"] as? [[String: Any]] {
@@ -552,6 +605,94 @@ class FService: NSObject {
                 }
                 else {
                     completion(nil, nil)
+                }
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
+    // MARK: - ORDER
+    func createOrder(shop_id: String, distance: Double, posts: [Post], completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
+        
+        var details: [[String: Any]] = []
+        for post in posts {
+            details.append(["post_id": post.id ?? "", "quantity": post.numSelected])
+        }
+        
+        let params = ["shop_id": shop_id,
+                      "lat": Common.curentLocation?.lat ?? 0.0,
+                      "lng": Common.curentLocation?.lng ?? 0.0,
+                      "address": Common.curentLocation?.address ?? " ",
+                      "distance": distance,
+                      "notes": " ",
+                      "details": details] as [String : Any]
+        requestBody(url: FService.createOrder, method: .post, params: params) { (result, error) in
+            
+            if let status: String = result?["status"] as? String, status == "success" {
+                if let data = result?["data"] as? [String: Any] {
+                    completion(data["id"] as? String, nil)
+                }
+                else {
+                    completion(nil, result?["message"] as? String)
+                }
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
+    func currentOrder(completion: @escaping (_ post: CurrentOrder?,_ errMsg: String?) -> ()) -> () {
+        let params = ["reason": " "] as [String : Any]
+        requestAuthorization(url: FService.curentOrder, method: .get, params: params) { (result, error) in
+            if let status: String = result?["status"] as? String, status == "success" {
+                if let data = result?["data"] as? [String: Any] {
+                    let orderInfo = Mapper<CurrentOrder>().map(JSON: data)
+                    completion(orderInfo, nil)
+                }
+                else {
+                    completion(nil, nil)
+                }
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
+    func cancelOrder(idPost: String, completion: @escaping (_ success: String?,_ errMsg: String?) -> ()) -> () {
+        
+        let endpoint = String(format: FService.cancelOrder, idPost)
+        requestBody(url: endpoint, method: .put, params: nil) { (result, error) in
+            
+            let status: String = result?["status"] as! String
+            if status == "success" {
+                completion("success", nil)
+            }
+            else {
+                completion(nil, result?["message"] as? String)
+            }
+        }
+    }
+    
+    func getFeaturedBanner( completion: @escaping (_ feature: [Feature]?,_ errMsg: String?) -> ()) -> () {
+        
+        requestAuthorization(url: FService.featuredBanner, method: .get, params: nil) { (result, error) in
+            
+            if let status: String = result?["status"] as? String, status == "success" {
+                if let data = result?["data"] as? [String: Any] {
+                    if let resultData = data["results"] as? [[String: Any]] {
+                        let categories  = Mapper<Feature>().mapArray(JSONArray: resultData)
+                        completion(categories, nil)
+                    }
+                    else {
+                        completion([], nil)
+                    }
+                }
+                else {
+                    completion(nil, result?["message"] as? String)
                 }
             }
             else {

@@ -47,6 +47,7 @@ class ProfileViewController: UIViewController {
         }
         
         self.hideKeyboardWhenTappedAround()
+        PKHUD.sharedHUD.contentView = PKHUDSystemActivityIndicatorView()
     }
     
     func setUserInfo(user: User?) {

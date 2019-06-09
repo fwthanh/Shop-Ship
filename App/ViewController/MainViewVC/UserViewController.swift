@@ -21,6 +21,8 @@ class UserViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     var listCategory: [Category]?
     var listShop: [Shop]?
+    var listBanner: [Feature]?
+    var currentOrder: CurrentOrder?
     
     var searchCompleter = MKLocalSearchCompleter()
     var searchResults = [MKLocalSearchCompletion]()
@@ -37,6 +39,11 @@ class UserViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         FService.sharedInstance.getCategories { (categories, errMsg) in
             self.listCategory = categories
+            self.tableView.reloadData()
+        }
+        
+        FService.sharedInstance.getFeaturedBanner { (features, errMsg) in
+            self.listBanner = features
             self.tableView.reloadData()
         }
         
@@ -58,15 +65,40 @@ class UserViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let refresher = PullToRefresh()
         tableView.addPullToRefresh(refresher) {
-            let delayTime = DispatchTime.now() + Double(Int64(2 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+            let delayTime = DispatchTime.now() + Double(Int64(1 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
             DispatchQueue.main.asyncAfter(deadline: delayTime) {
                 self.tableView.endRefreshing(at: .top)
+                self.refreshAllData()
             }
         }
         
         self.refreshAllData()
+        self.checkCurrentOrder()
     }
 
+    func checkCurrentOrder() {
+        FService.sharedInstance.currentOrder { (currentOrder, errMsg) in
+            if currentOrder != nil {
+                self.currentOrder = currentOrder
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let selectView: CurrentOrderVC = storyboard.instantiateViewController(withIdentifier: "CurrentOrderVC") as! CurrentOrderVC
+                selectView.view.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width - 40, height: 460)
+                selectView.view.layer.cornerRadius = 10.0
+                selectView.view.layer.masksToBounds = true
+                self.presentDialogViewController(selectView, animationPattern: .zoomInOut, backgroundViewType: .solid, dismissButtonEnabled: false, completion: nil)
+                selectView.setDataInfo(currentOrder: self.currentOrder)
+                selectView.btnCancel.add(UIControl.Event.touchUpInside, { (act) in
+                    FService.sharedInstance.cancelOrder(idPost: currentOrder?.id ?? "", completion: { (success, errMsg) in
+                        if success != nil {
+                            self.currentOrder = nil
+                            self.dismissDialogViewController(.zoomInOut)
+                        }
+                    })
+                })
+            }
+        }
+    }
+    
     func refreshAllData() {
         FService.sharedInstance.getShopBySearch(key: "", lat: Common.curentLocation?.lat ?? 0.0, lng: Common.curentLocation?.lng ?? 0.0, page: 1) { (shops, message) in
             self.listShop = shops
@@ -133,8 +165,11 @@ class UserViewController: UIViewController, UITableViewDelegate, UITableViewData
         // create a new cell if needed or reuse an old one
         if tableView == self.tableView {
             if indexPath.row == 0, let cell: TblHeaderCell = self.tableView.dequeueReusableCell(withIdentifier: "TblHeaderCell") as? TblHeaderCell {
-                cell.backgroundColor = .lightGray
+                cell.listBanner = self.listBanner
                 cell.selectionStyle = .none
+                cell.delegate = self
+                cell.collectionView.reloadData()
+                cell.pageControl.numberOfPages = self.listBanner?.count ?? 0
                 return cell
             }
             else if  indexPath.row == 1 ,let cell: CategoriesViewCell = self.tableView.dequeueReusableCell(withIdentifier: "CategoriesViewCell") as? CategoriesViewCell {
@@ -146,11 +181,12 @@ class UserViewController: UIViewController, UITableViewDelegate, UITableViewData
             else if  indexPath.row == 2 ,let cell: DeliveringViewCell = self.tableView.dequeueReusableCell(withIdentifier: "DeliveringViewCell") as? DeliveringViewCell {
                 cell.listShop = self.listShop
                 cell.collectionView.reloadData()
-                cell.selectPostBlock = { [weak self] (shop) in
+                cell.selectPostBlock = { [weak self] (shop, distance) in
                     guard let strongSelf = self else { return }
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     let viewController: MenuShopVC = storyboard.instantiateViewController(withIdentifier: "MenuShopVC") as! MenuShopVC
                     viewController.shopInfo = shop
+                    viewController.currentDistance = distance
                     strongSelf.navigationController?.pushViewController(viewController, animated: true)
                 }
                 return cell
@@ -176,10 +212,10 @@ class UserViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
         else {
-            self.view.endEditing(true)
             let value = self.searchResults[indexPath.row]
             self.tfAddress.text = value.title + ", " + value.subtitle
             tableView.isHidden = true
+            self.view.endEditing(true)
         }
     }
     
@@ -191,9 +227,19 @@ class UserViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 }
 
-extension UserViewController: CategoryDelegate {
-    func syncContactChanged(isOn: Bool) {
-        self.performSegue(withIdentifier: "SelectMenu", sender: self)
+extension UserViewController: CategoryDelegate, BannerDelegate {
+    func selectCategory(categoryId: String) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController: ListShopVC = storyboard.instantiateViewController(withIdentifier: "ListShopVC") as! ListShopVC
+        viewController.categoryId = categoryId
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    func selectShop(shopId: String) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController: MenuShopVC = storyboard.instantiateViewController(withIdentifier: "MenuShopVC") as! MenuShopVC
+        viewController.shopInfo = nil
+        viewController.shopId = shopId
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

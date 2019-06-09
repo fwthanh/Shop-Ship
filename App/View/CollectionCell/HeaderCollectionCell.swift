@@ -11,6 +11,7 @@ import UIKit
 class HeaderCollectionCell: UICollectionViewCell {
     
     @IBOutlet weak var imgView: UIImageView!
+    @IBOutlet weak var lbName: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
